@@ -1,0 +1,13 @@
+---
+title: "FINAL FINAL FINAL"
+output: html_notebook
+---
+```{r}
+library("readxl")
+setwd('FINAL FINAL FINAL')
+event.df <- read_excel("EventsCalendar (1).xlsx")
+```
+
+```{r}
+head(event.df)
+```
