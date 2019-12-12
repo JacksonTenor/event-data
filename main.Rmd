@@ -4,10 +4,96 @@ output: html_notebook
 ---
 ```{r}
 library("readxl")
-setwd('FINAL FINAL FINAL')
 event.df <- read_excel("EventsCalendar (1).xlsx")
 ```
 
 ```{r}
-head(event.df)
+View(event.df)
+```
+
+```{r}
+contains.free = function(str){
+  return(length(grep("free", str, ignore.case = TRUE)))
+}
+tmp.df <- event.df[!is.na(event.df$Cost), ]
+is.free <- lapply(tmp.df$Cost, contains.free)
+
+expensive.events <- tmp.df[!is.na(tmp.df['Cost']) & is.free == 0,]
+
+
+```
+
+```{r}
+eed <- expensive.events[order(expensive.events$'Date From'), ]$`Date From`
+
+time.between <- c()
+for (i in 1:length(eed) - 1){
+  time.between[i] <- difftime(eed[i+1], eed[i], units = c("days"))
+}
+tb.outliernt <- time.between[time.between < 100]
+
+summary(time.between)
+sd(time.between)
+boxplot(time.between, horizontal = TRUE, xlab="Days Between Events", main="Paid Events")
+```
+
+```{r}
+time.between <- c()
+for (i in 1:length(event.df) - 1){
+  time.between[i] <- difftime(eed[i+1], eed[i], units = c("days"))
+}
+tb.outliernt <- time.between[time.between < 100]
+
+summary(time.between)
+sd(time.between)
+boxplot(time.between, horizontal = TRUE, xlab="Days Between Events", main="All Events")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#base.date.df <- event.df[!is.na(event.df['Date From'])]
+nrow(event.df)
+
+
+date.df <- data.frame(as.Date('1/1/2000', origin = '1/1/1970'), 0)
+colnames(date.df) <- c("date", "freq")
+
+print(date.df)
+for (r in event.df[['Date From']]){
+  print("**")
+  matches = date.df[date.df['date'] == r]
+  if(length(matches) > 0){
+    print("*****************")
+    print(matches)
+    date.df['freq'] = data.frame(matches)['freq'] + 1
+    date.df <- matches
+  }else{
+    print("----------------")
+    new.row = data.frame(r, 1)
+    colnames(new.row) <- c("date", "freq")
+    date.df <- rbind(date.df, new.row)
+  }
+}
+```
+
+```{r}
+date.df['freq'] + 1
 ```
