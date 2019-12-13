@@ -101,6 +101,10 @@ for(i in 0:543){
 plot(table(daily.events), xlab="Number of Daily Events", ylab = "Frequency", main="All days")
 ```
 
+
+
+
+
 ```{r}
 library('lubridate')
 event.df$month <- month(event.df$`Date From`)
@@ -129,6 +133,11 @@ for(i in 0:(23 + 235*5 - length(daily.events))){
 }
 
 plot(table(daily.events), xlab="Number of Daily Events", ylab = "Frequency", main="September-April")
+```
+
+```{r}
+expensive.events$month <- month(expensive.events$`Date From`)
+plot(table(expensive.events$month), main="Paid Events by Month", xlab="Month", ylab="Number of Events")
 ```
 
 ```{r}
