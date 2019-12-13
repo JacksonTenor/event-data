@@ -20,6 +20,7 @@ is.free <- lapply(tmp.df$Cost, contains.free)
 
 expensive.events <- tmp.df[!is.na(tmp.df['Cost']) & is.free == 0,]
 
+nrow(expensive.events)
 
 ```
 
@@ -69,29 +70,65 @@ boxplot(time.between, horizontal = TRUE, xlab="Days Between Events", main="All E
 
 
 ```{r}
-#base.date.df <- event.df[!is.na(event.df['Date From'])]
-nrow(event.df)
 
-
-date.df <- data.frame(as.Date('1/1/2000', origin = '1/1/1970'), 0)
-colnames(date.df) <- c("date", "freq")
-
-print(date.df)
-for (r in event.df[['Date From']]){
-  print("**")
-  matches = date.df[date.df['date'] == r]
-  if(length(matches) > 0){
-    print("*****************")
-    print(matches)
-    date.df['freq'] = data.frame(matches)['freq'] + 1
-    date.df <- matches
+event.dates <- event.df[order(event.df$`Date From`),]$`Date From`
+length(event.dates)
+daily.events <- numeric()
+for (i in 2:length(event.dates)){
+  if (event.dates[i] != event.dates[i-1]){
+    daily.events <- c(daily.events, 1)
   }else{
-    print("----------------")
-    new.row = data.frame(r, 1)
-    colnames(new.row) <- c("date", "freq")
-    date.df <- rbind(date.df, new.row)
+    daily.events[length(daily.events)] = daily.events[length(daily.events)] + 1
   }
 }
+length(daily.events)
+
+
+length(daily.events)
+
+event.dates[1]
+tail(event.dates)
+
+difftime(event.dates[(length(event.dates))],event.dates[1],  units = c("days"))
+1865 - 1322
+
+for(i in 0:543){
+  daily.events = c(daily.events, 0)
+}
+
+
+
+plot(table(daily.events), xlab="Number of Daily Events", ylab = "Frequency", main="All days")
+```
+
+```{r}
+library('lubridate')
+event.df$month <- month(event.df$`Date From`)
+
+academic.year <- event.df[(event.df$month != 5 &
+                          event.df$month != 6 &
+                          event.df$month != 7 &
+                          event.df$month != 8), ]
+nrow(academic.year)
+
+event.dates <- academic.year[order(academic.year$`Date From`),]$`Date From`
+length(event.dates)
+daily.events <- numeric()
+for (i in 2:length(event.dates)){
+  if (event.dates[i] != event.dates[i-1]){
+    daily.events <- c(daily.events, 1)
+  }else{
+    daily.events[length(daily.events)] = daily.events[length(daily.events)] + 1
+  }
+}
+length(daily.events)
+head(academic.year$`Date From`)
+#23 Days + 235 * 5
+for(i in 0:(23 + 235*5 - length(daily.events))){
+  daily.events = c(daily.events, 0)
+}
+
+plot(table(daily.events), xlab="Number of Daily Events", ylab = "Frequency", main="September-April")
 ```
 
 ```{r}
