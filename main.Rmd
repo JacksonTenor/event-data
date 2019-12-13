@@ -138,6 +138,15 @@ plot(table(daily.events), xlab="Number of Daily Events", ylab = "Frequency", mai
 ```{r}
 expensive.events$month <- month(expensive.events$`Date From`)
 plot(table(expensive.events$month), main="Paid Events by Month", xlab="Month", ylab="Number of Events")
+
+september <- expensive.events[expensive.events$month == 9,]
+View(september)
+```
+
+```{r}
+event.df$month <- month(event.df$`Date From`)
+plot(table(event.df$month), main="All Events by Month", xlab="Month", ylab="Number of Events")
+
 ```
 
 ```{r}
